@@ -12,6 +12,7 @@ const BlinkDetector: React.FC = () => {
   const [isWebcamActive, setIsWebcamActive] = useState(false);
   const [blinkDetected, setBlinkDetected] = useState(false);
   const [eyeOpenness, setEyeOpenness] = useState(1); // 0 = closed, 1 = open
+  const [blinkScore, setBlinkScore] = useState(0); // Score to calculate at further stages
   const { toast } = useToast();
   
   // Mock blink detection - in a real app, we'd use a computer vision library
@@ -31,7 +32,11 @@ const BlinkDetector: React.FC = () => {
         if (shouldBlink) {
           setBlinkDetected(true);
           setEyeOpenness(0);
+          setBlinkScore(25); // Set score to 25 when blink is detected
           lastBlinkTime = now;
+          
+          // Show alert for blink detection
+          alert("Blink Detected!");
           
           toast({
             title: "Blink Detected!",
@@ -45,6 +50,9 @@ const BlinkDetector: React.FC = () => {
             setEyeOpenness(1);
           }, 500);
         } else {
+          // Show alert for no blink detection
+          alert("Blink not detected");
+          
           toast({
             title: "No Blink Detected",
             description: "No blink was detected. Please blink naturally.",
@@ -155,15 +163,20 @@ const BlinkDetector: React.FC = () => {
           </p>
           
           {isWebcamActive && (
-            <div className="flex items-center justify-center gap-2 text-xs text-muted-foreground">
-              <span>Eye Openness:</span>
-              <div className="w-20 h-2 bg-secondary rounded-full overflow-hidden">
-                <div 
-                  className="h-full bg-primary transition-all duration-300 ease-in-out" 
-                  style={{ width: `${eyeOpenness * 100}%` }} 
-                />
+            <>
+              <div className="flex items-center justify-center gap-2 text-xs text-muted-foreground">
+                <span>Eye Openness:</span>
+                <div className="w-20 h-2 bg-secondary rounded-full overflow-hidden">
+                  <div 
+                    className="h-full bg-primary transition-all duration-300 ease-in-out" 
+                    style={{ width: `${eyeOpenness * 100}%` }} 
+                  />
+                </div>
               </div>
-            </div>
+              <div className="mt-2 text-sm font-medium">
+                Current Blink Score: {blinkScore}
+              </div>
+            </>
           )}
         </div>
       </CardContent>
