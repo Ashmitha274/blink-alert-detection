@@ -1,5 +1,5 @@
 
-import { BlinkDetector } from "@/components/BlinkDetector";
+import BlinkDetector from "@/components/BlinkDetector";
 
 const Index = () => {
   return (
